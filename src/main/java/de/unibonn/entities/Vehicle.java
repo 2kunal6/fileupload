@@ -1,20 +1,18 @@
 package de.unibonn.entities;
 
 // TODO: Convert it to vehicle and set type as car, bus, truck etc.
-public class Car {
-    private String model;
-    private String registration_number;
-
-    public Car(String model, String registration_number) {
-        this.model = model;
-        this.registration_number = registration_number;
+public abstract class Vehicle {
+    public enum vehicle_type {
+        CAR, BUS, TRUCK;
     }
+    protected vehicle_type model;
+    protected String registration_number;
 
-    public String getModel() {
+    public vehicle_type getModel() {
         return model;
     }
 
-    public void setModel(String model) {
+    public void setModel(vehicle_type model) {
         this.model = model;
     }
 
@@ -26,7 +24,7 @@ public class Car {
         this.registration_number = registration_number;
     }
 
-    public boolean equals(Car other) {
+    public boolean equals(Vehicle other) {
         return this.registration_number.toLowerCase().equals(other.getRegistration_number().toLowerCase());
     }
 }

@@ -1,6 +1,6 @@
 package de.unibonn.services;
 
-import de.unibonn.entities.ParkingLotCar;
+import de.unibonn.entities.ParkingLotVehicle;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -8,41 +8,61 @@ import java.util.HashMap;
 public class ParkingLotService {
     private long maximumCapacity;
     private long currentCapacity=0;
-    private HashMap<String, ParkingLotCar> parkingLotCars = new HashMap<String, ParkingLotCar>();
+    private HashMap<String, ParkingLotVehicle> parkingLotVehicles = new HashMap<String, ParkingLotVehicle>();
+    private HashMap<Object, Double> vehicleHourlyRates = new HashMap<Object, Double>();
+    private HashMap<Object, Double> vehicleExtraTimeRates = new HashMap<Object, Double>();
 
-    public ParkingLotService(long maximumCapacity) {
-        this.maximumCapacity = maximumCapacity;
+    public HashMap<Object, Double> getVehicleExtraTimeRates() {
+        return vehicleExtraTimeRates;
     }
 
-    public String addCar(ParkingLotCar parkingLotCar) {
+    public void setVehicleExtraTimeRates(HashMap<Object, Double> vehicleExtraTimeRates) {
+        this.vehicleExtraTimeRates = vehicleExtraTimeRates;
+    }
+
+    public HashMap<Object, Double> getVehicleHourlyRates() {
+        return vehicleHourlyRates;
+    }
+
+    public void setVehicleHourlyRates(HashMap<Object, Double> vehicleHourlyRates) {
+        this.vehicleHourlyRates = vehicleHourlyRates;
+    }
+
+    public ParkingLotService(long maximumCapacity, HashMap<Object, Double> vehicleHourlyRates, HashMap<Object, Double> vehicleExtraTimeRates) {
+        this.maximumCapacity = maximumCapacity;
+        this.vehicleHourlyRates = vehicleHourlyRates;
+        this.vehicleExtraTimeRates = vehicleExtraTimeRates;
+    }
+
+    public String addVehicle(ParkingLotVehicle parkingLotVehicle) {
         if(currentCapacity == maximumCapacity) {
             return "FULL";
         }
-        if(parkingLotCars.containsKey(parkingLotCar.getCar().getRegistration_number().toLowerCase())) {
+        if(parkingLotVehicles.containsKey(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase())) {
             return "ALREADY PRESENT";
         }
-        parkingLotCar.setInTime(LocalDateTime.now());
-        parkingLotCars.put(parkingLotCar.getCar().getRegistration_number().toLowerCase(), parkingLotCar);
+        parkingLotVehicle.setInTime(LocalDateTime.now());
+        parkingLotVehicles.put(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase(), parkingLotVehicle);
         currentCapacity++;
         return "PASS";
     }
-    public boolean isPaymentComplete(ParkingLotCar parkingLotCar) {
-        return parkingLotCar.isPaymentComplete();
+    public boolean isPaymentComplete(ParkingLotVehicle parkingLotVehicle) {
+        return parkingLotVehicle.isPaymentComplete();
     }
-    public double getPayAmount(ParkingLotCar parkingLotCar) {
-        return parkingLotCar.calculatePayment(LocalDateTime.now());
+    public double getPayAmount(ParkingLotVehicle parkingLotVehicle) {
+        return parkingLotVehicle.calculatePayment(LocalDateTime.now());
     }
-    public void makePayment(ParkingLotCar parkingLotCar) {
-        parkingLotCar.setPaymentComplete(true);
+    public void makePayment(ParkingLotVehicle parkingLotVehicle) {
+        parkingLotVehicle.setPaymentComplete(true);
     }
-    public String removeCar(ParkingLotCar parkingLotCar) {
-        if(!parkingLotCars.containsKey(parkingLotCar.getCar().getRegistration_number().toLowerCase())) {
+    public String removeCar(ParkingLotVehicle parkingLotVehicle) {
+        if(!parkingLotVehicles.containsKey(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase())) {
             return "NOT PRESENT";
         }
-        if(!parkingLotCar.isPaymentComplete()) {
+        if(!parkingLotVehicle.isPaymentComplete()) {
             return "PLEASE MAKE PAYMENT FIRST";
         }
-        parkingLotCars.remove(parkingLotCar);
+        parkingLotVehicles.remove(parkingLotVehicle);
         return "PASS";
     }
 }

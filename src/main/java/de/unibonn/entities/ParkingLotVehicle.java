@@ -2,8 +2,8 @@ package de.unibonn.entities;
 
 import java.util.Date;
 
-public abstract class ParkingLotCar {
-    protected Car car;
+public abstract class ParkingLotVehicle {
+    protected Vehicle vehicle;
     protected Date inTime;
     protected Date outTIme;
     private boolean isPaymentComplete = false;
@@ -16,12 +16,12 @@ public abstract class ParkingLotCar {
         isPaymentComplete = paymentComplete;
     }
 
-    public Car getCar() {
-        return car;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public Date getInTime() {
@@ -44,5 +44,5 @@ public abstract class ParkingLotCar {
         return (inTime.getTime() - outTime.getTime())/1000;
     }
 
-    public abstract double calculatePayment(Date outTime);
+    public abstract double calculatePayment(Date outTime, Double hourlyRate);
 }
