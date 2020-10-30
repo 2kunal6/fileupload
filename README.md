@@ -21,7 +21,7 @@ Description: This project provides a ParkingLot service.
         - Before allowing a new vehicle checks if space available and payment is made
         - Before allowing to remove a vehicle checks if vehicle present, if payment made. 
 
-To Run:
+- To Run:
     - From project root run: mvn install   
     - Run: java -jar target/parking-lot-1.0-SNAPSHOT-jar-with-dependencies.jar
     - Main Class: src/main/java/de/unibonn/App.java
