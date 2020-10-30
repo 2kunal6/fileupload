@@ -36,7 +36,7 @@ public class PayUpfrontParkingLotCar extends ParkingLotCar {
         this.hourlyRate = hourlyRate;
     }
 
-    public double calculatePayment(Date inTime, Date outTime) {
+    public double calculatePayment(Date outTime) {
         Long timeDifferenceInSeconds = getTimeDifferenceInSeconds(inTime, outTime);
         Long extraTimeInSeconds = timeDifferenceInSeconds - maximumAllowedTime;
         if(extraTimeInSeconds > 0) {

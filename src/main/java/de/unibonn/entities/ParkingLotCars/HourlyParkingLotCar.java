@@ -10,10 +10,8 @@ public class HourlyParkingLotCar extends ParkingLotCar {
 
     private double hourlyRate;
 
-    public HourlyParkingLotCar(Car car, Date inTime, double hourlyRate) {
+    public HourlyParkingLotCar(Car car, double hourlyRate) {
         this.car = car;
-        this.inTime = inTime;
-        this.outTIme = outTIme;
         this.hourlyRate = hourlyRate;
     }
 
@@ -25,7 +23,8 @@ public class HourlyParkingLotCar extends ParkingLotCar {
         this.hourlyRate = hourlyRate;
     }
 
-    public double calculatePayment(Date inTime, Date outTime) {
+    public double calculatePayment(Date outTime) {
+        this.outTIme = outTime;
         Long timeDifferenceInSeconds = getTimeDifferenceInSeconds(inTime, outTime);
         double timeDifferenceInHours = TimeUtil.convertSecondsToHours(timeDifferenceInSeconds);
         return timeDifferenceInHours * hourlyRate;

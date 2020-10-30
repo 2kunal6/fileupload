@@ -6,10 +6,14 @@ public abstract class ParkingLotCar {
     protected Car car;
     protected Date inTime;
     protected Date outTIme;
+    private boolean isPaymentComplete = false;
 
-    public ParkingLotCar(Car car, Date inTime) {
-        this.car = car;
-        this.inTime = inTime;
+    public boolean isPaymentComplete() {
+        return isPaymentComplete;
+    }
+
+    public void setPaymentComplete(boolean paymentComplete) {
+        isPaymentComplete = paymentComplete;
     }
 
     public Car getCar() {
@@ -40,5 +44,5 @@ public abstract class ParkingLotCar {
         return (inTime.getTime() - outTime.getTime())/1000;
     }
 
-    public abstract double calculatePayment(Date inTime, Date outTime);
+    public abstract double calculatePayment(Date outTime);
 }
