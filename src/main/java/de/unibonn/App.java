@@ -20,7 +20,9 @@ public class App {
         ParkingLotVehicle parkingLotVehicle2 = new PayUpfrontParkingLotVehicle(bus, TimeUtil.convertHoursToSeconds(1.5));
 
         ParkingLotService parkingLotService = new ParkingLotService(100, createVehicleHourlyRates(),createVehicleExtraTimeRates());
-        parkingLotService.addVehicle(parkingLotVehicle1);
+        String result;
+        result = parkingLotService.addVehicle(parkingLotVehicle1);
+        System.out.println(result);
         parkingLotService.addVehicle(parkingLotVehicle2);
 
         parkingLotService.removeVehicle(parkingLotVehicle2);
@@ -32,7 +34,7 @@ public class App {
             return "PARKING LOT IS FULL";
         } else {
             // Making it synchronized so that only one thread can access
-            synchronized () {
+            //synchronized () {
                 double amountToPay = parkingLotService.getEntryPayAmount(parkingLotVehicle);
                 parkingLotService.makeEntryPayment(parkingLotVehicle);
 
@@ -41,22 +43,22 @@ public class App {
                     parkingLotService.addVehicle(parkingLotVehicle);
                 }
                 return "SUCCESS";
-            }
+            //}
         }
     }
     public static String removeVehicle(ParkingLotService parkingLotService, ParkingLotVehicle parkingLotVehicle) {
-        if(!parkingLotService.isVehiclePresent()) {
+        if(!parkingLotService.isVehiclePresent(parkingLotVehicle)) {
             return "VEHICLE NOT PRESENT";
         } else {
             // Making it synchronized so that only one thread can access
-            synchronized () {
+            //synchronized () {
                 double amountToPay = parkingLotService.getLeavePayAmount(parkingLotVehicle);
                 parkingLotService.makeLeavePayment(parkingLotVehicle);
                 if(parkingLotService.isLeavePaymentComplete(parkingLotVehicle)) {
                     parkingLotService.removeVehicle(parkingLotVehicle);
                 }
                 return "SUCCESS";
-            }
+            //}
         }
     }
     public static HashMap<Object, Double> createVehicleHourlyRates() {

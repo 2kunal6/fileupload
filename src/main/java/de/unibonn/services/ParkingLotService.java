@@ -3,6 +3,7 @@ package de.unibonn.services;
 import de.unibonn.entities.ParkingLotVehicle;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ParkingLotService {
@@ -45,7 +46,7 @@ public class ParkingLotService {
         if(!parkingLotVehicle.isEntryPaymentComplete()) {
             return "PLEASE MAKE PAYMENT FIRST";
         }
-        parkingLotVehicle.setInTime(LocalDateTime.now());
+        parkingLotVehicle.setInTime(new Date());
         parkingLotVehicles.put(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase(), parkingLotVehicle);
         currentCapacity++;
         return "PASS";
@@ -67,7 +68,7 @@ public class ParkingLotService {
     }
 
     public double getEntryPayAmount(ParkingLotVehicle parkingLotVehicle) {
-        return parkingLotVehicle.calculateEntryPayment(LocalDateTime.now(), vehicleHourlyRates.get(parkingLotVehicle.getVehicle().getType()));
+        return parkingLotVehicle.calculateEntryPayment(new Date(), vehicleHourlyRates.get(parkingLotVehicle.getVehicle().getType()));
     }
 
     public void makeEntryPayment(ParkingLotVehicle parkingLotVehicle) {
@@ -79,7 +80,7 @@ public class ParkingLotService {
     }
 
     public double getLeavePayAmount(ParkingLotVehicle parkingLotVehicle) {
-        return parkingLotVehicle.calculateLeavePayment(LocalDateTime.now(), vehicleHourlyRates.get(parkingLotVehicle.getVehicle().getType()),
+        return parkingLotVehicle.calculateLeavePayment(new Date(), vehicleHourlyRates.get(parkingLotVehicle.getVehicle().getType()),
                 vehicleExtraTimeRates.get(parkingLotVehicle.getVehicle().getType()));
     }
 
