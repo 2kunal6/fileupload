@@ -20,4 +20,7 @@ Description: This project provides a ParkingLot service.
             - vehicleExtraTimeRates hashmap: keeps penalty values for different vehicle types.
         - Before allowing a new vehicle checks if space available and payment is made
         - Before allowing to remove a vehicle checks if vehicle present, if payment made. 
-  
+
+To Run:
+    - From project root run: mvn install   
+    - Run: java -jar target/parking-lot-1.0-SNAPSHOT-jar-with-dependencies.jar 
