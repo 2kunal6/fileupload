@@ -13,7 +13,7 @@ public class HourlyParkingLotVehicle extends ParkingLotVehicle {
     }
 
     public double calculateEntryPayment(Date outTime, Double hourlyRate) {
-        return 0.0; //While entering hourly type vehicles don't need to pay anything
+        return 0.0; //While entering hourly type vehicles don't need to pay anything in advance
     }
 
     public double calculateLeavePayment(Date outTime, Double hourlyRate, Double extraRate) {
