@@ -36,19 +36,17 @@ public class ParkingLotService {
     }
 
     public boolean isEntryPossible() {
-        return currentCapacity < maximumCapacity;
+        return this.currentCapacity < this.maximumCapacity;
+    }
+
+    public boolean isAlreadyPresent(ParkingLotVehicle parkingLotVehicle) {
+        return parkingLotVehicles.containsKey(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase());
     }
 
     public String addVehicle(ParkingLotVehicle parkingLotVehicle) {
-        if(parkingLotVehicles.containsKey(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase())) {
-            return "ALREADY PRESENT";
-        }
-        if(!parkingLotVehicle.isEntryPaymentComplete()) {
-            return "PLEASE MAKE PAYMENT FIRST";
-        }
         parkingLotVehicle.setInTime(new Date());
         parkingLotVehicles.put(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase(), parkingLotVehicle);
-        currentCapacity++;
+        this.currentCapacity++;
         return "PASS";
     }
 

@@ -15,26 +15,37 @@ public class Demo extends Thread {
     public void giveDemo() {
         Vehicle car = new Car(Vehicle.vehicle_type.CAR, "TS00 0000");
         Vehicle bus = new Bus(Vehicle.vehicle_type.BUS, "TS01 1111");
+        Vehicle bus2 = new Bus(Vehicle.vehicle_type.BUS, "TS01 1111");
 
         ParkingLotVehicle parkingLotVehicle1 = new HourlyParkingLotVehicle(car);
         ParkingLotVehicle parkingLotVehicle2 = new PayUpfrontParkingLotVehicle(bus, TimeUtil.convertHoursToSeconds(1.5));
+        ParkingLotVehicle parkingLotVehicle3 = new PayUpfrontParkingLotVehicle(bus2, TimeUtil.convertHoursToSeconds(1.5));
 
-        ParkingLotService parkingLotService = new ParkingLotService(100, createVehicleHourlyRates(), createVehicleExtraTimeRates());
+        ParkingLotService parkingLotService = new ParkingLotService(2, createVehicleHourlyRates(), createVehicleExtraTimeRates());
         String result;
-        result = parkingLotService.addVehicle(parkingLotVehicle1);
+        result = addVehicle(parkingLotService, parkingLotVehicle1);
         System.out.println(result);
-        parkingLotService.addVehicle(parkingLotVehicle2);
+        result = addVehicle(parkingLotService, parkingLotVehicle1);
+        System.out.println(result);
+        result = addVehicle(parkingLotService, parkingLotVehicle2);
+        System.out.println(result);
+        result = addVehicle(parkingLotService, parkingLotVehicle3);
+        System.out.println(result);
 
-        parkingLotService.removeVehicle(parkingLotVehicle2);
-        parkingLotService.removeVehicle(parkingLotVehicle1);
+        result = parkingLotService.removeVehicle(parkingLotVehicle2);
+        System.out.println(result);
+        result = parkingLotService.removeVehicle(parkingLotVehicle1);
+        System.out.println(result);
     }
 
     public String addVehicle(ParkingLotService parkingLotService, ParkingLotVehicle parkingLotVehicle) {
-        if (!parkingLotService.isEntryPossible()) {
-            return "PARKING LOT IS FULL";
-        } else {
-            // Making it synchronized so that only one thread can access
-            synchronized (this) {
+
+        synchronized (this) {
+            if (!parkingLotService.isEntryPossible()) {
+                return "PARKING LOT IS FULL";
+            } else if(parkingLotService.isAlreadyPresent(parkingLotVehicle)) {
+                return "VEHICLE ALREADY PRESENT";
+            } else {
                 double amountToPay = parkingLotService.getEntryPayAmount(parkingLotVehicle);
                 parkingLotService.makeEntryPayment(parkingLotVehicle);
 
@@ -48,11 +59,10 @@ public class Demo extends Thread {
     }
 
     public String removeVehicle(ParkingLotService parkingLotService, ParkingLotVehicle parkingLotVehicle) {
-        if (!parkingLotService.isVehiclePresent(parkingLotVehicle)) {
-            return "VEHICLE NOT PRESENT";
-        } else {
-            // Making it synchronized so that only one thread can access
-            synchronized (this) {
+        synchronized (this) {
+            if (!parkingLotService.isVehiclePresent(parkingLotVehicle)) {
+                return "VEHICLE NOT PRESENT";
+            } else {
                 double amountToPay = parkingLotService.getLeavePayAmount(parkingLotVehicle);
                 parkingLotService.makeLeavePayment(parkingLotVehicle);
                 if (parkingLotService.isLeavePaymentComplete(parkingLotVehicle)) {
