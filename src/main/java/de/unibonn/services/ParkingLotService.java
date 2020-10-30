@@ -46,15 +46,19 @@ public class ParkingLotService {
         currentCapacity++;
         return "PASS";
     }
+
     public boolean isPaymentComplete(ParkingLotVehicle parkingLotVehicle) {
         return parkingLotVehicle.isPaymentComplete();
     }
+
     public double getPayAmount(ParkingLotVehicle parkingLotVehicle) {
-        return parkingLotVehicle.calculatePayment(LocalDateTime.now());
+        return parkingLotVehicle.calculatePayment(LocalDateTime.now(), vehicleHourlyRates.get(parkingLotVehicle.getVehicle().getType()));
     }
+
     public void makePayment(ParkingLotVehicle parkingLotVehicle) {
         parkingLotVehicle.setPaymentComplete(true);
     }
+
     public String removeCar(ParkingLotVehicle parkingLotVehicle) {
         if(!parkingLotVehicles.containsKey(parkingLotVehicle.getVehicle().getRegistration_number().toLowerCase())) {
             return "NOT PRESENT";

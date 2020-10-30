@@ -5,15 +5,15 @@ public abstract class Vehicle {
     public enum vehicle_type {
         CAR, BUS, TRUCK;
     }
-    protected vehicle_type model;
+    protected vehicle_type type;
     protected String registration_number;
 
-    public vehicle_type getModel() {
-        return model;
+    public vehicle_type getType() {
+        return type;
     }
 
-    public void setModel(vehicle_type model) {
-        this.model = model;
+    public void setType(vehicle_type type) {
+        this.type = type;
     }
 
     public String getRegistration_number() {
