@@ -2,18 +2,28 @@ package de.unibonn.entities;
 
 import java.util.Date;
 
+// TODO: Change the payment methods to not pass unused parameters (Ex. ExtraTimeRate is not used in HourlyParkingLotVehicle)
 public abstract class ParkingLotVehicle {
     protected Vehicle vehicle;
     protected Date inTime;
     protected Date outTIme;
-    private boolean isPaymentComplete = false;
+    private boolean isEntryPaymentComplete = false;
+    private boolean isLeavePaymentComplete = false;
 
-    public boolean isPaymentComplete() {
-        return isPaymentComplete;
+    public boolean isEntryPaymentComplete() {
+        return isEntryPaymentComplete;
     }
 
-    public void setPaymentComplete(boolean paymentComplete) {
-        isPaymentComplete = paymentComplete;
+    public void setEntryPaymentComplete(boolean entryPaymentComplete) {
+        isEntryPaymentComplete = entryPaymentComplete;
+    }
+
+    public boolean isLeavePaymentComplete() {
+        return isLeavePaymentComplete;
+    }
+
+    public void setLeavePaymentComplete(boolean leavePaymentComplete) {
+        isLeavePaymentComplete = leavePaymentComplete;
     }
 
     public Vehicle getVehicle() {
@@ -44,5 +54,9 @@ public abstract class ParkingLotVehicle {
         return (inTime.getTime() - outTime.getTime())/1000;
     }
 
-    public abstract double calculatePayment(Date outTime, Double hourlyRate);
+    // To calculate the amount that needs to be payed before entering the parking lot
+    public abstract double calculateEntryPayment(Date outTime, Double hourlyRate);
+
+    // To calculate the amount that needs to be payed before leaving the parking lot
+    public abstract double calculateLeavePayment(Date outTime, Double hourlyRate, Double extraRate);
 }

@@ -1,5 +1,7 @@
 package de.unibonn;
 
+import de.unibonn.Util.TimeUtil;
+import de.unibonn.entities.ParkingLotVehicles.PayUpfrontParkingLotVehicle;
 import de.unibonn.entities.Vehicle;
 import de.unibonn.entities.ParkingLotVehicle;
 import de.unibonn.entities.ParkingLotVehicles.HourlyParkingLotVehicle;
@@ -15,19 +17,46 @@ public class App {
         Vehicle bus = new Bus(Vehicle.vehicle_type.BUS, "TS01 1111");
 
         ParkingLotVehicle parkingLotVehicle1 = new HourlyParkingLotVehicle(car);
-        ParkingLotVehicle parkingLotVehicle2 = new HourlyParkingLotVehicle(bus);
+        ParkingLotVehicle parkingLotVehicle2 = new PayUpfrontParkingLotVehicle(bus, TimeUtil.convertHoursToSeconds(1.5));
 
         ParkingLotService parkingLotService = new ParkingLotService(100, createVehicleHourlyRates(),createVehicleExtraTimeRates());
         parkingLotService.addVehicle(parkingLotVehicle1);
         parkingLotService.addVehicle(parkingLotVehicle2);
 
-        if(parkingLotService.isPaymentComplete(parkingLotVehicle1)) {
-            parkingLotService.removeCar(parkingLotVehicle1);
+        parkingLotService.removeVehicle(parkingLotVehicle2);
+        parkingLotService.removeVehicle(parkingLotVehicle1);
+    }
+
+    public static String addVehicle(ParkingLotService parkingLotService, ParkingLotVehicle parkingLotVehicle) {
+        if(!parkingLotService.isEntryPossible()) {
+            return "PARKING LOT IS FULL";
         } else {
-            double amountToPay = parkingLotService.getPayAmount(parkingLotVehicle1);
-            //if user made payment
-            parkingLotVehicle1.setPaymentComplete(true);
-            parkingLotService.removeCar(parkingLotVehicle1);
+            // Making it synchronized so that only one thread can access
+            synchronized () {
+                double amountToPay = parkingLotService.getEntryPayAmount(parkingLotVehicle);
+                parkingLotService.makeEntryPayment(parkingLotVehicle);
+
+                // TODO: Change this to allow entry without payment. Collect total payment at the end
+                if(parkingLotService.isEntryPaymentComplete(parkingLotVehicle)) {
+                    parkingLotService.addVehicle(parkingLotVehicle);
+                }
+                return "SUCCESS";
+            }
+        }
+    }
+    public static String removeVehicle(ParkingLotService parkingLotService, ParkingLotVehicle parkingLotVehicle) {
+        if(!parkingLotService.isVehiclePresent()) {
+            return "VEHICLE NOT PRESENT";
+        } else {
+            // Making it synchronized so that only one thread can access
+            synchronized () {
+                double amountToPay = parkingLotService.getLeavePayAmount(parkingLotVehicle);
+                parkingLotService.makeLeavePayment(parkingLotVehicle);
+                if(parkingLotService.isLeavePaymentComplete(parkingLotVehicle)) {
+                    parkingLotService.removeVehicle(parkingLotVehicle);
+                }
+                return "SUCCESS";
+            }
         }
     }
     public static HashMap<Object, Double> createVehicleHourlyRates() {

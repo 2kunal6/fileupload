@@ -12,7 +12,11 @@ public class HourlyParkingLotVehicle extends ParkingLotVehicle {
         this.vehicle = vehicle;
     }
 
-    public double calculatePayment(Date outTime, Double hourlyRate) {
+    public double calculateEntryPayment(Date outTime, Double hourlyRate) {
+        return 0.0; //While entering hourly type vehicles don't need to pay anything
+    }
+
+    public double calculateLeavePayment(Date outTime, Double hourlyRate, Double extraRate) {
         this.outTIme = outTime;
         Long timeDifferenceInSeconds = getTimeDifferenceInSeconds(inTime, outTime);
         double timeDifferenceInHours = TimeUtil.convertSecondsToHours(timeDifferenceInSeconds);
