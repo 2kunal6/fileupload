@@ -1,0 +1,5 @@
+{"mappings":{"name":"name","emailAdress":"emailId","dob":"dob"},
+  "order":["name","emailAdress","dob"],
+  "date_formats":{"dob":"mm-dd-yyyy"},
+  "transformation":{"salary":"monthly_to_yearly"}
+}
