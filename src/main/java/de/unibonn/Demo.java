@@ -4,7 +4,7 @@ import de.unibonn.entities.Vendor;
 import de.unibonn.services.Vendor.VendorService;
 
 public class Demo extends Thread {
-    public void giveDemo() {
+    public void giveDemo() throws Exception {
         VendorService vendorService = new VendorService();
         Vendor vendor1 = new Vendor();
         //use root file location from properties file

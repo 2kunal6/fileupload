@@ -25,4 +25,8 @@ public class CSVfile {
     public Date getDOB() {
         return dob;
     }
+
+    public String toString() {
+        return "name:" + name + ", emailId:" + emailId + ", dob:" + dob;
+    }
 }
